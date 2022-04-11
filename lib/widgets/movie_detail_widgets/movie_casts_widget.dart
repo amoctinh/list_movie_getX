@@ -1,78 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../bloc/movie_casts_bloc/movie_casts_cubit.dart';
-import '../../bloc/theme_bloc/theme_controller.dart';
+import 'package:flutter_list_movie/controller/movie_cast_controller.dart';
+import 'package:get/get.dart';
 import '../../repositories/movie_repository.dart';
-import '../home_screen_widgets/movie_widgets_loader.dart';
+import 'casts_list_horizontal.dart';
 
-class MovieCasts extends StatelessWidget {
-  const MovieCasts(
+
+class MovieCasts extends GetWidget {
+
+ MovieCasts(
       {Key? key,
-      required this.movieId,
-      required this.themeController,
-      required this.movieRepository})
+      required this.movieId,})
       : super(key: key);
-  final ThemeController themeController;
-  final MovieRepository movieRepository;
+
   final int movieId;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => MovieCastsCubit(
-        repository: context.read<MovieRepository>(),
-      )..fetchCasts(movieId),
-      child: CastsView(
-        movieId: movieId,
-        movieRepository: movieRepository,
-        themeController: themeController,
-      ),
-    );
-  }
-}
+    final MovieCastController movieController = Get.put(MovieCastController(movieId));
+    return Obx(() {
+      if (movieController.isLoading.value) {
+        print('MovieController.isLoading.value :' +
+            movieController.isLoading.value.toString());
+        return const Center(child: CircularProgressIndicator());
+      } else {
+        return
+          CastsListHorizontal(
+            casts: movieController.castList,
 
-class CastsView extends StatelessWidget {
-  const CastsView(
-      {Key? key,
-      required this.movieId,
-      required this.themeController,
-      required this.movieRepository})
-      : super(key: key);
-  final ThemeController themeController;
-  final MovieRepository movieRepository;
-  final int movieId;
+          );
+        //   Container(
+        //   decoration: BoxDecoration(
+        //     // shape: BoxShape.circle,
+        //     border: Border.all(
+        //       color: Colors.grey,
+        //     ),
+        //     image: DecorationImage(
+        //       // fit: BoxFit.fill,
+        //         image: AssetImage("assets/logo.jpg")),
+        //   ),
+        // );
 
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<MovieCastsCubit>().state;
-
-    switch (state.status) {
-      case ListStatus.failure:
-        return const Center(
-            child: Text(
-          'KO có !',
-          style: TextStyle(color: Colors.white),
-        ));
-      case ListStatus.success:
-        return Container(
-          decoration: BoxDecoration(
-            // shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.grey,
-            ),
-            image: DecorationImage(
-                // fit: BoxFit.fill,
-                image: AssetImage("assets/logo.jpg")),
-          ),
-        );
-      //   CastsListHorizontal(
-      //   casts: state.casts,
-      //   movieRepository: movieRepository,
-      //   themeController: themeController,
-      // );
-      default:
-        return buildMovielistLoaderWidget(context);
+      }
     }
+    );
   }
 }

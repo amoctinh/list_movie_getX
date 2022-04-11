@@ -4,19 +4,20 @@ import 'package:get/state_manager.dart';
 
 class MovieController extends GetxController {
   var isLoading = true.obs;
-  var productList = <Movie>[];
-  late final MovieRepository repository;
-  // var productList = List<Product>().obs;
+ var movieList = <Movie>[].obs;
   @override
   void onInit() {
-    fetchMovie();
+    fetchListMovie();
     super.onInit();
   }
-
-  void fetchMovie() async {
+  Future fetchListMovie() async {
     isLoading.value = true;
-    var movies = await repository.getNowPlaying(1);
-    productList = movies as List<Movie>;
+    try {
+     final movies = await MovieRepository().getNowPlaying(1);
+     movieList.value = movies.movies;
+    } catch (e) {
+      print(e);
+    }
     isLoading.value = false;
   }
 }

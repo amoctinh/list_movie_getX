@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_list_movie/bloc/theme_bloc/theme_controller.dart';
 import 'package:flutter_list_movie/model/genre.dart';
 import 'package:flutter_list_movie/repositories/movie_repository.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 import 'genres_by_movie_widgets/genre_movie_widget.dart';
 
 class GenresListHorizontal extends StatefulWidget {
-  const GenresListHorizontal(
-      {Key? key,
-      required this.genres,
-      required this.themeController,
-      required this.movieRepository})
-      : super(key: key);
+  const GenresListHorizontal({
+    Key? key,
+    required this.genres,
+  }) : super(key: key);
 
   final List<Genre> genres;
-  final ThemeController themeController;
-  final MovieRepository movieRepository;
 
   @override
   State<GenresListHorizontal> createState() => _GenresListHorizontalState();
@@ -30,14 +26,17 @@ class _GenresListHorizontalState extends State<GenresListHorizontal> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset("assets/intro/introLogo.mp4"
-        // "https://amt2020.000webhostapp.com/intro/introLogo.mp4"
-        )
-      ..initialize().then((_) {
-        _controller.play();
-        _controller.setLooping(true);
-        setState(() {});
-      });
+    _controller = VideoPlayerController.asset("");
+    Future.delayed(const Duration(seconds: 1), () {
+      _controller = VideoPlayerController.asset("assets/intro/introLogo.mp4"
+          // "https://amt2020.000webhostapp.com/intro/introLogo.mp4"
+          )
+        ..initialize().then((_) {
+          _controller.play();
+          _controller.setLooping(true);
+          setState(() {});
+        });
+    });
   }
 
   @override
@@ -72,20 +71,14 @@ class _GenresListHorizontalState extends State<GenresListHorizontal> {
                       const EdgeInsets.only(bottom: 10.0, left: 8.0, top: 15.0),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GenreMovieListWidget(
-                              themeController: widget.themeController,
-                              movieRepository: widget.movieRepository,
-                              genre: widget.genres[index]),
-                        ),
+                      Get.to(
+                        GenreMovieListWidget(genre: widget.genres[index]),
                       );
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Container(

@@ -1,74 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_list_movie/bloc/theme_bloc/theme_controller.dart';
+import 'package:flutter_list_movie/controller/movie_controller.dart';
 import 'package:flutter_list_movie/repositories/movie_repository.dart';
+import 'package:flutter_list_movie/widgets/home_screen_widgets/movie_widgets_loader.dart';
+import 'package:flutter_list_movie/widgets/home_screen_widgets/movies_grid_list_horizontal.dart';
 import 'package:flutter_list_movie/widgets/home_screen_widgets/movies_list_horizontal.dart';
+import 'package:get/get.dart';
 
-import '../../../bloc/now_playing_bloc/now_playing_cubit.dart';
-import '../movie_widgets_loader.dart';
+import 'now_playing_widget.dart';
 
 class NowPlayingList extends StatelessWidget {
-  const NowPlayingList(
-      {Key? key, required this.themeController, required this.movieRepository})
-      : super(key: key);
-  final ThemeController themeController;
-  final MovieRepository movieRepository;
-
+  // final MovieController movieController = Get.put(MovieController());
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => NowPlayingCubit(
-        repository: context.read<MovieRepository>(),
-      )..fetchList(),
-      child: NowPlayingView(
-        themeController: themeController,
-        movieRepository: movieRepository,
-      ),
-    );
-  }
-}
+    return GetX<MovieController>(
+        init: MovieController(),
+        builder: (movieController){
+      if (movieController.isLoading.value) {
+        print('MovieController.isLoading.value :' +
+            movieController.isLoading.value.toString());
+        return buildMovielistLoaderWidget(context);
+        return const Center(child: CircularProgressIndicator());
+      } else {
+        return Column(
+          children: [
 
-class NowPlayingView extends StatelessWidget {
-  const NowPlayingView(
-      {Key? key, required this.themeController, required this.movieRepository})
-      : super(key: key);
-  final ThemeController themeController;
-  final MovieRepository movieRepository;
 
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<NowPlayingCubit>().state;
-    switch (state.status) {
-      case ListStatus.failure:
-        return const Center(child: Text('Có lỗi !'));
-      case ListStatus.success:
-        if (state.movies.isEmpty) {
-          return SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  children: const <Widget>[
-                    Text(
-                      "Không có báo ",
-                      style: TextStyle(color: Colors.black45),
-                    )
-                  ],
-                )
+            Row(
+              children: [
+                const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(" PHIM NỔI BẬT",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          backgroundColor: Colors.white,
+                          color: Colors.black,
+                        ))),
+                InkWell(
+                  onTap: () {
+                    Get.to(NowPlayingWidget(
+                      movies: movieController.movieList,
+                    ));
+                  },
+                  child: const SizedBox(
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ),
               ],
             ),
-          );
-        } else {
-          return MoviesListHorizontal(
-            movies: state.movies,
-            movieRepository: movieRepository,
-            themeController: themeController,
-          );
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                height: 300,
+                child:  MoviesListHorizontal(
+                  movies: movieController.movieList,lenght: 3,
+                ),
+              ),
+            ),
+
+          ],
+        );
         }
-      default:
-        return buildMovielistLoaderWidget(context);
-    }
+    });
   }
 }

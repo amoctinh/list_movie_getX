@@ -30,7 +30,7 @@ class MovieRepository {
     var params = {"api_key": apiKey, "language": "vi-vn", "page": page};
     try {
       Response response =
-          await Dio().get(getMoviesApi, queryParameters: params);
+          await _dio.get(getMoviesApi, queryParameters: params);
       print("responseresponseresponse : " + response.data.toString());
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
@@ -42,7 +42,7 @@ class MovieRepository {
     var params = {"api_key": apiKey, "language": "vi-vn", "page": page};
     try {
       Response response =
-          await Dio().get(getPopularMoviesApi, queryParameters: params);
+          await _dio.get(getPopularMoviesApi, queryParameters: params);
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       return MovieResponse.withError("Error: $error, StackTrace: $stacktrace");
@@ -53,7 +53,7 @@ class MovieRepository {
     var params = {"api_key": apiKey, "language": "vi-vn", "page": page};
     try {
       Response response =
-          await Dio().get(getNowPlayingMoviesApi, queryParameters: params);
+          await _dio.get(getNowPlayingMoviesApi, queryParameters: params);
       print("Phim mới nhất ... : " + response.data.toString());
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
@@ -65,7 +65,7 @@ class MovieRepository {
     var params = {"api_key": apiKey, "language": "vi-vn", "page": 1};
     try {
       Response response =
-          await Dio().get(getUpComingApi, queryParameters: params);
+          await _dio.get(getUpComingApi, queryParameters: params);
       print("Nổi bật ... : " + response.data.toString());
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
@@ -73,11 +73,11 @@ class MovieRepository {
     }
   }
 
-  Future<MovieResponse> getTopRatedMovies() async {
-    var params = {"api_key": apiKey, "language": "vi-vn", "page": 1};
+  Future<MovieResponse> getTopRatedMovies(int page) async {
+    var params = {"api_key": apiKey, "language": "vi-vn", "page": page};
     try {
       Response response =
-          await Dio().get(getTopRatedMoviesApi, queryParameters: params);
+          await _dio.get(getTopRatedMoviesApi, queryParameters: params);
       print("Phim hot ... : " + response.data.toString());
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
@@ -89,7 +89,7 @@ class MovieRepository {
     var params = {"api_key": apiKey, "language": "vi-vn", "page": 1};
     try {
       Response response =
-          await Dio().get(getPlayingUrl, queryParameters: params);
+          await _dio.get(getPlayingUrl, queryParameters: params);
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       return MovieResponse.withError("Error: $error, StackTrace: $stacktrace");
@@ -111,7 +111,7 @@ class MovieRepository {
     var params = {"api_key": apiKey};
     try {
       Response response =
-          await Dio().get(getPersonsUrl, queryParameters: params);
+          await _dio.get(getPersonsUrl, queryParameters: params);
       return PersonResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       return PersonResponse.withError("Error: $error, StackTrace: $stacktrace");
@@ -129,7 +129,7 @@ class MovieRepository {
     var params = {...getParams(), "with_genres": id};
     try {
       Response response =
-          await Dio().get(getMoviesUrl, queryParameters: params);
+          await _dio.get(getMoviesUrl, queryParameters: params);
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       return MovieResponse.withError("Error: $error, StackTrace: $stacktrace");
@@ -140,7 +140,7 @@ class MovieRepository {
     var params = {"api_key": apiKey, "language": "vi-vn"};
     try {
       Response response =
-          await Dio().get(movieUrl + "/$id", queryParameters: params);
+          await _dio.get(movieUrl + "/$id", queryParameters: params);
       return MovieDetailResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       return MovieDetailResponse.withError(
@@ -151,7 +151,7 @@ class MovieRepository {
   Future<VideoResponse> getMovieVideos(int id) async {
     var params = {"api_key": apiKey, "language": "vi-vn"};
     try {
-      Response response = await Dio()
+      Response response = await _dio
           .get(movieUrl + "/$id" + "/videos", queryParameters: params);
       print("Video ... : " + response.data.toString());
       return VideoResponse.fromJson(response.data);
@@ -163,7 +163,7 @@ class MovieRepository {
   Future<MovieResponse> getSimilarMovies(int id) async {
     var params = {"api_key": apiKey, "language": "vi-vn"};
     try {
-      Response response = await Dio()
+      Response response = await _dio
           .get(movieUrl + "/$id" + "/similar", queryParameters: params);
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
@@ -174,7 +174,7 @@ class MovieRepository {
   Future<CastResponse> getCasts(int id) async {
     var params = {"api_key": apiKey, "language": "vi-vn"};
     try {
-      Response response = await Dio()
+      Response response = await _dio
           .get(movieUrl + "/$id" + "/credits", queryParameters: params);
       return CastResponse.fromJson(response.data);
     } catch (error, stacktrace) {

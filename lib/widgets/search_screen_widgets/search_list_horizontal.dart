@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_list_movie/bloc/theme_bloc/theme_controller.dart';
 import 'package:flutter_list_movie/model/movie.dart';
-import 'package:flutter_list_movie/repositories/movie_repository.dart';
 import 'package:flutter_list_movie/screens/movie_detail_screen/movie_detail_screen.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:video_player/video_player.dart';
 
 class SearchListHorizontal extends StatefulWidget {
-  const SearchListHorizontal(
-      {Key? key,
-      required this.movies,
-      required this.themeController,
-      required this.movieRepository})
-      : super(key: key);
+  const SearchListHorizontal({
+    Key? key,
+    required this.movies,
+  }) : super(key: key);
 
   final List<Movie> movies;
-  final ThemeController themeController;
-  final MovieRepository movieRepository;
 
   @override
   State<SearchListHorizontal> createState() => _SearchListHorizontalState();
@@ -241,42 +236,34 @@ class _SearchListHorizontalState extends State<SearchListHorizontal> {
                                                           height: 40.0,
                                                           child: Center(
                                                             child: Container(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        right:
-                                                                            5.0),
-                                                                child:
-                                                                    Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius: const BorderRadius
-                                                                              .all(
-                                                                          Radius.circular(
-                                                                              30.0)),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .all(
+                                                                      13.0),
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: const BorderRadius
+                                                                          .all(
+                                                                      Radius.circular(
+                                                                          30.0)),
+                                                                  color: Colors
+                                                                      .white
+                                                                      .withOpacity(
+                                                                          0.1)),
+                                                              child: Container(
+                                                                child: Text(
+                                                                  suggestion[
+                                                                      'name']!,
+                                                                  maxLines: 2,
+                                                                  style: const TextStyle(
+                                                                      height:
+                                                                          1.4,
                                                                       color: Colors
-                                                                          .white
-                                                                          .withOpacity(
-                                                                              0.1)),
-                                                                  child: Text(
-                                                                    suggestion[
-                                                                        'name']!,
-                                                                    maxLines: 2,
-                                                                    style: const TextStyle(
-                                                                        height:
-                                                                            1.4,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            12.0),
-                                                                  ),
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          12.0),
                                                                 ),
                                                               ),
                                                             ),
@@ -296,18 +283,7 @@ class _SearchListHorizontalState extends State<SearchListHorizontal> {
                                     onSuggestionSelected:
                                         (Map<String, String> suggestion) {
                                       int id = int.parse(suggestion['id']!);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              MovieDetailScreen(
-                                                  themeController:
-                                                      widget.themeController,
-                                                  movieRepository:
-                                                      widget.movieRepository,
-                                                  movieId: id),
-                                        ),
-                                      );
+                                      Get.to(MovieDetailScreen(movieId: id));
                                     },
                                   ),
                                 ),
