@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_list_movie/style/theme_bloc/theme_controller.dart';
 import 'package:flutter_list_movie/style/theme_bloc/theme_service.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class App extends StatelessWidget {
           theme: CustomTheme.lightTheme,
           darkTheme: CustomTheme.darkTheme,
           themeMode: themeController.themeMode,
+          builder: EasyLoading.init(),
           home: MainScreen(themeController: themeController,),
         );
       },

@@ -51,6 +51,7 @@ dependencies:
   lottie:
   flutter_typeahead:
   flutter_slider_drawer:
+  flutter_easyloading:
 
 
   http: ^0.13.3

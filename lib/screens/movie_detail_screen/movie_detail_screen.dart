@@ -1,14 +1,12 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'dart:async';
+
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_list_movie/controller/movie_detail_controller.dart';
-import 'package:flutter_list_movie/widgets/movie_detail_widgets/movie_casts_widget.dart';
 import 'package:flutter_list_movie/widgets/movie_detail_widgets/movie_detail_widgets.dart';
-import 'package:flutter_list_movie/widgets/movie_detail_widgets/similar_movies_widget.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:add_to_cart_animation/add_to_cart_icon.dart';
 import 'package:badges/badges.dart';
@@ -33,7 +31,6 @@ class _DetailViewState extends State<MovieDetailScreen> {
   GlobalKey<CartIconKey> gkCart = GlobalKey<CartIconKey>();
   late Function(GlobalKey) runAddToCardAnimation;
   late int _counter = 0;
-
   void initState() {
     super.initState();
   }
@@ -41,10 +38,17 @@ class _DetailViewState extends State<MovieDetailScreen> {
   void listClick(GlobalKey gkImage) {
     Future.delayed(const Duration(milliseconds: 1500), () {
       // checkBoxCallBack(isOnline);
-
       setState(() {
         _counter++;
       });
+      // EasyLoading.show();
+      // await m.save(models);
+      // await EasyLoading.show(
+      //   status: 'loading...',
+      //   maskType: EasyLoadingMaskType.black,
+      // );
+      // EasyLoading.dismiss();
+      EasyLoading.showSuccess('Thêm thành công');
       print("kkkk $_counter");
     });
 
@@ -203,7 +207,10 @@ class AppListItem extends StatelessWidget {
           height: 60),
     );
     return InkWell(
-        onTap: () => onClick(imageGlobalKey),
+        onTap: () async {
+          onClick(imageGlobalKey);
+          },
+
         child: Container(
           decoration: const BoxDecoration(
               borderRadius:
@@ -221,7 +228,7 @@ class AppListItem extends StatelessWidget {
               const Expanded(
                 flex: 4,
                 child: Text(
-                  "Thêm vào giỏ phim",
+                  "Thêm vào Giỏ phim",
                   // maxLines: 2,
                   textAlign: TextAlign.center,
                   style: TextStyle(
