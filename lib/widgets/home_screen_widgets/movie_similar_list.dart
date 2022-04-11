@@ -1,8 +1,5 @@
-import 'dart:html';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_list_movie/controller/popular_movie_controller.dart';
 import 'package:flutter_list_movie/model/movie.dart';
 import 'package:flutter_list_movie/screens/movie_detail_screen/movie_detail_screen.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
